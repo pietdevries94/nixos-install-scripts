@@ -57,19 +57,22 @@ sed -i -E 's:^\}\s*$::g' /mnt/etc/nixos/configuration.nix
 # Extend/override default `configuration.nix`:
 echo '
   boot.loader.grub.devices = [ "/dev/sda" ];
+  
+  services.openssh = {
+    enable = true;
+    permitRootLogin = "prohibit-password";
+    passwordAuthentication = false;
+    challengeResponseAuthentication = false;
+    extraConfig = "Compression no";
+  };
 
-  # Initial empty root password for easy login:
-  users.users.root.initialHashedPassword = "";
-  services.openssh.permitRootLogin = "prohibit-password";
-
-  services.openssh.enable = true;
-
-  users.users.root.openssh.authorizedKeys.keys = [
-    # Replace this by your SSH pubkey!
-    "ssh-rsa AAAAAAAAAAA..."
-  ];
+  users.users.root = {
+    openssh.authorizedKeys.keyFiles = [ ./ssh-key.pub ];
+  };
 }
 ' >> /mnt/etc/nixos/configuration.nix
+
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDOU03D5oDPOgzBdy6irxnk5M7rhJjJlVy9AI7AhME2LAun/L5FRJ8jp+ip+iE2jcXtT/MsM83EMQkfXQg98Mo13ryjvPCL4glk81V9h6nLXPt0a5+0j2f5xEq/7cXfUh4cKCt9J3RZU2uY/63hJWET5DKMy0ZnhhHA7AqGgZLyrxfC/0UKaW4TwburUnuWZqE1FWHFu2up9f+GGsSa6P2zdtK/ChI0bWhjDZNYQwrX4c06liHvndR1imjVf7UoHetKeu7uYz5X+TkMDZeP+rTsBkshQeIZEMUgGMYeFZSN0RgRSBINKFms/8ny1g6yev6k7g/7WulsJK6Vb/r0lnQNVHdTdQE5NkBYWWZuit1koCRvNZyjSLE5ROPdo+fSN0qpu7GTbftL/DJqVgsEqGCwKXNB7hhHw3OUT7zgnDIEUkhDSpu0Svs3A8c34ulhI05gLKfRXprJY42xQQsEGK60R09FdvNqHWXm1acN3t1tpS6LPkaAkENGhrrdVBeb3QBHz5/JoiBaXFH+6sZfzx1z5g4uu7X0rSmAbvOwl8Y6QfbfiXRZy/PbRryNswIxI5T46vjjHZqlcTHsRYyJAK7jLXEZudQvuHvhacugbuMtrfDlH5VF2s9q4c8rnOI2ra6O1bitIhdp2bW/nZXx5x6CsZUG3/m7nar46dT570NNSw== piet@devries.tech' > /mnt/etc/nixos/ssh-key.pub
 
 nixos-install --no-root-passwd
 
