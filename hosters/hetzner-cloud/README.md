@@ -5,7 +5,7 @@
 3. You won't be able to ssh into your server. You will have to do the following steps by logging in with the Hetzner UI.
     - On the top right of the server details click on the icon `>_`.
     - Fork this repo and replace your SSH public key in the script. For exapmle, make a commit on a new branch.
-    - Get the URL of the script you created (might look like `https://raw.github.com/YOUR_USER_NAME/nixos-install-scripts/YOUR_BRANCH_NAME/hosters/hetzner-cloud/nixos-install-hetzner-cloud.sh`).
+    - Get the URL of the script you created (might look like `https://raw.github.com/pietdevries94/nixos-install-scripts/master/hosters/hetzner-cloud/nixos-install-hetzner-cloud.sh`).
     - Paste the following command into your console gui `curl -L YOUR_URL | sudo bash`.
    This will install NixOS and turn the server off.
 4. In your server options on the Hetzner UI click on `Unmount`, and turn the server back on using the big power-switch button in the top right.
